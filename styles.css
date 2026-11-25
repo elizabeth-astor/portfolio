@@ -1,0 +1,356 @@
+/* Elizaveta portfolio — variant «Hybrid» (Finn × Zara Miller), 2026-11-25.
+   Finn: bold grotesk display, cursor trail, «Selected work» grid. Zara Miller: serif italics, inline images,
+   outline pills, numbered process cards, hairline price list, coloured CTA block. Base beige nude + peach. */
+
+:root {
+  /* colour */
+  --bg: #f8f2eb;          /* warm cream ground */
+  --plate: #efe4d7;       /* beige plate behind slides */
+  --card: #fcf9f5;        /* light card on the ground */
+  --peach: #f6d3c0;       /* peach block */
+  --peach-2: #efbfa6;     /* peach hover / ring */
+  --ink: #35261e;         /* text */
+  --ink-2: #7c675a;       /* secondary text */
+  --accent: #b9663f;      /* peach-terracotta italic words, ≥ 24 px only */
+  --line: rgba(53, 38, 30, .16);
+  /* type */
+  --sans: 'Inter Tight', 'Helvetica Neue', Arial, sans-serif;
+  --serif: 'Cormorant Garamond', 'Times New Roman', serif;
+  /* space scale */
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px; --s7: 48px; --s8: 64px; --s9: 96px; --s10: 128px;
+  --gut: clamp(16px, 1.8vw, 28px);
+  /* radii */
+  --r-s: 6px; --r-m: 12px; --r-l: 20px; --r-pill: 999px;
+  /* motion (Apple-like springs approximated) */
+  --ease: cubic-bezier(.22, .9, .25, 1);
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --spring-default: linear(0, 0.0042, 0.0157, 0.0333, 0.0557, 0.0819, 0.1111, 0.1424, 0.1753, 0.2093,
+    0.2438, 0.2786, 0.3132, 0.3474, 0.381, 0.4139, 0.4459, 0.4769, 0.5068, 0.5355,
+    0.5631, 0.5895, 0.6146, 0.6386, 0.6614, 0.683, 0.7035, 0.7228, 0.7411, 0.7583,
+    0.7745, 0.7898, 0.8042, 0.8176, 0.8303, 0.8421, 0.8532, 0.8635, 0.8732, 0.8823,
+    0.8907, 0.8986, 0.906, 0.9128, 0.9192, 0.9251, 0.9306, 0.9358, 0.9406, 0.945,
+    0.9491, 0.9529, 0.9565, 0.9598, 0.9628, 0.9656, 0.9683, 0.9707, 0.9729, 0.975,
+    0.9769, 0.9787, 0.9804, 0.9819, 0.9833, 0.9846, 0.9858, 0.9869, 0.9879, 0.9889,
+    0.9898, 0.9906, 0.9913, 0.992, 0.9926, 0.9932, 0.9938, 0.9943, 0.9947, 1);
+  --spring-default-duration: 475ms;
+  --spring-quick:
+    linear(0, 0.0042, 0.0157, 0.0333, 0.0556, 0.0818, 0.1109, 0.1423, 0.1751, 0.2091,
+    0.2436, 0.2783, 0.3129, 0.3471, 0.3807, 0.4136, 0.4455, 0.4765, 0.5064, 0.5351,
+    0.5627, 0.5891, 0.6143, 0.6382, 0.661, 0.6826, 0.7031, 0.7225, 0.7407, 0.758,
+    0.7742, 0.7895, 0.8038, 0.8173, 0.83, 0.8418, 0.8529, 0.8633, 0.873, 0.882,
+    0.8905, 0.8984, 0.9057, 0.9126, 0.919, 0.9249, 0.9305, 0.9356, 0.9404, 0.9448,
+    0.949, 0.9528, 0.9563, 0.9596, 0.9627, 0.9655, 0.9682, 0.9706, 0.9728, 0.9749,
+    0.9769, 0.9786, 0.9803, 0.9818, 0.9832, 0.9845, 0.9857, 0.9869, 0.9879, 0.9888,
+    0.9897, 0.9905, 0.9913, 0.992, 0.9926, 0.9932, 0.9937, 0.9942, 0.9947, 1);
+  --spring-quick-duration: 356ms;
+  --accent-line: #cf9479;   /* hand-drawn marks, from the concept */
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 400 17px/1.45 var(--sans); letter-spacing: -.005em;
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+}
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, p, ol, ul, figure { margin: 0; padding: 0; }
+ol, ul { list-style: none; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+.it { font-family: var(--serif); font-style: italic; font-weight: 500; letter-spacing: -.01em; color: var(--accent); text-transform: none; }
+
+/* ---------- pills and button (one pill system) ---------- */
+.pill {
+  display: inline-flex; align-items: center; height: 40px; padding: 0 18px; border-radius: var(--r-pill);
+  font: 500 15px/1 var(--sans); white-space: nowrap;
+  transition: background-color .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease);
+}
+.pill--line { border: 1px solid var(--ink); background: var(--bg); }
+.pill--line:hover { background: var(--ink); color: var(--bg); }
+.pill--ink { background: var(--ink); color: var(--bg); border: 1px solid var(--ink); }
+.pill--ink:hover { background: var(--accent); border-color: var(--accent); }
+.pill--lg { height: 56px; padding: 0 26px; font-size: 16px; }
+
+/* Button 1:1 from the concept (round 10, Tiko 2026-11-25): peach pill, ink circle with a chevron; on hover the whole
+   pill turns ink at once, the label rolls up and the light copy rolls in, the circle turns peach (spring-quick 356 ms: hover is frequent). */
+.btn { --h: 56px; position: relative; display: inline-flex; align-items: center; gap: 16px; height: var(--h); padding: 4px 4px 4px 26px;
+  border-radius: var(--r-pill); background: var(--btn-bg, var(--peach)); color: var(--ink); font: 500 16px/1 var(--sans); white-space: nowrap; isolation: isolate;
+  transition: transform var(--spring-quick-duration) var(--spring-quick), background-color var(--spring-quick-duration) var(--spring-quick); }
+.btn::before { content: ''; position: absolute; top: 4px; right: 4px; bottom: 4px; width: calc(var(--h) - 8px); border-radius: var(--r-pill); background: var(--ink); z-index: -1;
+  transition: background-color var(--spring-quick-duration) var(--spring-quick); }
+.btn__t { position: relative; display: block; height: 1.25em; overflow: hidden; }   /* clip: the text-roll mask */
+.btn__t > span { display: block; line-height: 1.25em; transform: translate3d(0, 0, 0); backface-visibility: hidden; will-change: transform;
+  transition: transform var(--spring-quick-duration) var(--spring-quick); }   /* own layer: the label rolls without subpixel jitter */
+.btn__t > span + span { color: var(--card); }
+.btn__f { flex: none; display: grid; place-items: center; width: calc(var(--h) - 8px); height: calc(var(--h) - 8px); color: var(--card);
+  transition: color var(--spring-quick-duration) var(--spring-quick); }
+.btn__f svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+  transition: transform var(--spring-quick-duration) var(--spring-quick); }
+.btn:active { transform: scale(.97); }
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover, .btn:focus-visible { background-color: var(--ink); }
+  .btn:hover::before, .btn:focus-visible::before { background-color: var(--peach); }
+  .btn:hover .btn__f, .btn:focus-visible .btn__f { color: var(--ink); }
+  .btn:hover .btn__f svg, .btn:focus-visible .btn__f svg { transform: translateX(3px); }
+  .btn:hover .btn__t > span, .btn:focus-visible .btn__t > span { transform: translate3d(0, -100%, 0); }
+}
+.cta .btn, .work--cta .btn { --btn-bg: var(--card); }   /* on a peach surface the pill is light */
+/* the second button is the same construction (label left, circle right), only outlined (Tiko 2026-11-25: buttons aligned alike) */
+.btn--line { --btn-bg: var(--bg); box-shadow: inset 0 0 0 1px var(--ink); }
+@media (hover: hover) and (pointer: fine) { .btn--line:hover .btn__f svg, .btn--line:focus-visible .btn__f svg { transform: translateY(3px); } }
+
+/* ---------- hand-drawn marks (from the concept): the line draws in after its heading appears ---------- */
+.mk { position: relative; display: inline-block; white-space: nowrap; }
+.mk__svg { position: absolute; pointer-events: none; overflow: visible; }
+.mk__svg path { fill: none; stroke: var(--accent-line); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1;
+  transition: stroke-dashoffset 1.1s var(--ease-out) .55s; }
+.is-vis .mk__svg path, .no-js .mk__svg path { stroke-dashoffset: 0; }
+.mk--under .mk__svg { left: -3%; width: 106%; bottom: -.14em; height: .3em; }
+.mk--loop .mk__svg { left: -4%; width: 108%; bottom: -.22em; height: .36em; }
+.mk--circle .mk__svg { left: -.3em; top: -.12em; width: calc(100% + .6em); height: calc(100% + .32em); }
+.mk--circle .mk__svg path { stroke-width: 2.4; }
+.mk--circle { margin-left: .22em; }   /* the circle must not touch the word before it */
+@media (prefers-reduced-motion: reduce) { .mk__svg path { transition: none; stroke-dashoffset: 0; } }
+
+/* ---------- header ---------- */
+.top {
+  position: fixed; inset: 0 0 auto 0; z-index: 30; display: flex; align-items: center; justify-content: space-between;
+  padding: calc(env(safe-area-inset-top, 0px) + 14px) var(--gut) 14px;
+  transition: background-color .3s var(--ease), box-shadow .3s var(--ease);
+}
+.top.is-solid { background: rgba(248, 242, 235, .88); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: 0 1px 0 var(--line); }
+.top__name { font: italic 500 30px/1 var(--serif); letter-spacing: -.01em; }
+/* logo (Tiko 2026-11-25 «Подпись»): italic name, a hairline, small tracked caps; tracking leaves a trailing gap, cancelled by margin-right */
+.logo { display: inline-flex; align-items: center; }
+.lg { display: inline-flex; align-items: center; gap: 14px; color: var(--ink); white-space: nowrap; }
+.lg__name { font: italic 500 31px/1 var(--serif); letter-spacing: -.01em; padding-bottom: 4px; }
+.lg__rule { width: 1px; height: 26px; background: currentColor; opacity: .35; }
+.lg__sub { font: 500 8.5px/1.35 var(--sans); letter-spacing: .24em; margin-right: -.24em; text-transform: uppercase; color: var(--ink-2); }
+@media (max-width: 640px) { .lg { gap: 10px; } .lg__name { font-size: 26px; } }
+.top__nav { display: flex; gap: 8px; }
+
+/* ---------- hero ---------- */
+.hero {
+  position: relative; min-height: 100svh; display: grid; place-items: center; text-align: center;
+  padding: 96px var(--gut) 72px; overflow: hidden; touch-action: pan-y;
+}
+.trail { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+.trail__card {
+  position: absolute; left: 0; top: 0; width: var(--w, 170px); aspect-ratio: 3 / 4; border-radius: var(--r-s);
+  object-fit: cover; box-shadow: 0 18px 40px -18px rgba(53, 38, 30, .35);
+  transform: translate(-50%, -50%) rotate(var(--r, 0deg)) scale(.6); opacity: 0;
+  transition: transform .55s var(--ease-out), opacity .25s linear;
+  will-change: transform, opacity;   /* no blur on exit: a filter repaints the whole slide every frame and stuttered the CTA */
+}
+.trail__card.is-in { opacity: 1; transform: translate(-50%, -50%) rotate(var(--r, 0deg)) scale(1); }
+.trail__card.is-out { opacity: 0; transform: translate(-50%, -50%) rotate(var(--r, 0deg)) scale(.92); transition-duration: .6s, .6s; }
+.hero__copy { position: relative; z-index: 1; display: grid; justify-items: center; gap: var(--s5); }
+/* the kicker above the heading and the line under it share one format (Tiko 2026-11-25: «надо это в одном формате сделать») */
+.hero__kicker, .hero__sub { font: 400 clamp(18px, 1.5vw, 21px)/1.45 var(--sans); letter-spacing: 0; color: var(--ink-2); }
+.hero__h { display: grid; justify-items: center; font: 700 clamp(44px, 7.6vw, 124px)/.98 var(--sans); letter-spacing: -.045em; text-transform: uppercase; }
+.hero__l1, .hero__l2 { display: block; white-space: nowrap; }
+.hero__l2 { font-size: 1.04em; line-height: 1.02; letter-spacing: -.015em; padding-top: .04em; }
+.br-m { display: none; }
+.inl { display: inline-block; vertical-align: -.06em; margin: 0 .14em; overflow: hidden; border-radius: .09em; background: var(--plate); }
+.inl img { width: 100%; height: 100%; object-fit: cover; }
+.inl--hero { position: relative; width: .76em; height: .98em; vertical-align: -.1em; transform: rotate(-4deg); }   /* Tiko: a little bigger */
+.inl--hero img { position: absolute; inset: 0; transition: opacity .45s var(--ease); }   /* slides swap every 1.8 s (app.js) */
+.inl--hero img.is-new { opacity: 0; }
+.hero__l2 .inl--hero { transform: rotate(5deg); margin-left: .2em; }
+.hero__sub { max-width: 46ch; }
+.hero__cta { position: relative; z-index: 3; display: flex; flex-wrap: wrap; justify-content: center; gap: var(--s3); margin-top: var(--s2); }
+.hero__hint { position: absolute; left: 0; right: 0; bottom: 24px; z-index: 1; font-size: 14px; color: var(--ink-2); text-align: center; }
+.hint-touch { display: none; }
+@media (hover: none) { .hint-mouse { display: none; } .hint-touch { display: inline; } }
+
+/* ---------- facts ---------- */
+.facts { display: grid; grid-template-columns: repeat(4, 1fr); margin: 0 var(--gut); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.fact { display: grid; gap: 6px; padding: var(--s5) var(--s5) var(--s5) 0; }
+.fact + .fact { padding-left: var(--s5); border-left: 1px solid var(--line); }
+.fact b { font: 600 clamp(28px, 2.6vw, 40px)/1 var(--sans); letter-spacing: -.035em; }
+.fact span { font-size: 15px; color: var(--ink-2); }
+
+/* ---------- section heads ---------- */
+.sec-head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--s5); flex-wrap: wrap; margin-bottom: var(--s6); }
+.h2 { font: 700 clamp(40px, 5.4vw, 80px)/1 var(--sans); letter-spacing: -.045em; }
+.h2 .it { font-size: 1.1em; letter-spacing: -.02em; }
+.sec-head__note { font-size: 16px; color: var(--ink-2); padding-bottom: .4em; }
+
+/* ---------- works (Finn grid) ---------- */
+.works { padding: var(--s10) var(--gut) var(--s9); }
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; row-gap: var(--s7); }
+.work { display: grid; gap: var(--s3); text-align: left; }
+.work__media { position: relative; aspect-ratio: 4 / 5; border-radius: var(--r-m); overflow: hidden; background: var(--plate); }
+.work__media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform .8s var(--ease-out); }
+.work__peek { position: absolute; z-index: 0; top: 11%; width: 40%; aspect-ratio: 3 / 4; border-radius: var(--r-s); overflow: hidden; opacity: 0;
+  box-shadow: 0 20px 40px -20px rgba(53, 38, 30, .5); transition: transform .7s var(--ease-out), opacity .4s var(--ease); }
+.work__peek img { position: static; }
+.work__peek--l { left: 6%; transform: translateX(24%) rotate(-4deg); }   /* the fan stays inside the plate: it clips */
+.work__peek--r { right: 6%; transform: translateX(-24%) rotate(4deg); }
+.work__main { position: absolute; inset: 0; z-index: 1; transition: transform .7s var(--ease-out); }
+.work__tag {
+  position: absolute; z-index: 2; left: 14px; bottom: 14px; display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px;
+  border-radius: var(--r-pill); background: var(--bg); font: 500 14px/1 var(--sans);
+  opacity: 0; transform: translateY(8px); transition: opacity .35s var(--ease), transform .45s var(--ease-out);
+}
+.work__title { font: 600 clamp(22px, 2vw, 30px)/1.1 var(--sans); letter-spacing: -.03em; }
+.work__sub { font-size: 16px; color: var(--ink-2); max-width: 44ch; }
+@media (hover: hover) {
+  .work:hover .work__main { transform: scale(.74) translateY(-5%); }
+  .work:hover .work__peek { opacity: 1; }
+  .work:hover .work__peek--l { transform: rotate(-7deg); }
+  .work:hover .work__peek--r { transform: rotate(7deg); }
+  .work:hover .work__tag { opacity: 1; transform: none; }
+}
+.work__main img { border-radius: 0; }
+.work:hover .work__main img { border-radius: var(--r-s); box-shadow: 0 24px 48px -20px rgba(53, 38, 30, .45); }
+.work__main img { transition: border-radius .5s var(--ease), box-shadow .5s var(--ease); }
+.work--cta .work__media { display: grid; align-content: space-between; padding: var(--s6); background: var(--peach); }
+.work--cta .work__big { font: 700 clamp(32px, 3.2vw, 52px)/1 var(--sans); letter-spacing: -.045em; }
+.work--cta .work__big .it { color: var(--ink); font-size: 1.1em; }
+.work--cta p { font-size: 17px; max-width: 30ch; }
+.work--cta .btn { justify-self: start; }
+
+/* ---------- process (Zara cards) ---------- */
+.process { padding: var(--s9) var(--gut); }
+/* the cards of one row share their rows (subgrid): numbers, icons, titles and texts line up whatever the text length (Tiko 2026-11-25) */
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: auto minmax(110px, 1fr) auto auto; gap: 12px; }
+.step { display: grid; grid-row: span 4; grid-template-rows: subgrid; row-gap: var(--s3); padding: var(--s5); border-radius: var(--r-m); background: var(--card); }
+.step__n { font-size: 15px; color: var(--ink-2); }
+.step__ic { grid-row: 2; align-self: center; width: 84px; height: 84px; overflow: visible; }
+.step__ic .f { fill: var(--peach); transform: translate(3px, 3px); }
+.step__ic .s { fill: none; stroke: var(--ink); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.js .step__ic .f { opacity: 0; transition: opacity .6s var(--ease) calc(var(--d, 0) * 90ms + 700ms); }
+.js .step__ic .s { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1.4s var(--ease) calc(var(--d, 0) * 90ms + 200ms); }
+.js .step.is-vis .step__ic .f { opacity: 1; }
+.js .step.is-vis .step__ic .s { stroke-dashoffset: 0; }
+.step__t { grid-row: 3; font: italic 500 clamp(28px, 2.4vw, 36px)/1.05 var(--serif); letter-spacing: -.01em; color: var(--accent); }
+.step p { grid-row: 4; font-size: 16px; color: var(--ink-2); }
+
+/* ---------- price (Zara list) ---------- */
+.price { padding: var(--s9) var(--gut); }
+.rows { border-top: 1px solid var(--ink); }
+.row { display: grid; grid-template-columns: 5fr 2fr 5fr; gap: var(--s5); align-items: baseline; padding: var(--s5) 0; border-bottom: 1px solid var(--line); }
+.row__name { font: italic 500 clamp(28px, 2.6vw, 40px)/1.1 var(--serif); letter-spacing: -.01em; }
+.row__name sup { font: 500 13px/1 var(--sans); color: var(--ink-2); margin-left: 6px; vertical-align: .9em; font-style: normal; }
+.row__val { font: 600 clamp(22px, 2vw, 30px)/1.1 var(--sans); letter-spacing: -.03em; }
+.row__txt { font-size: 16px; color: var(--ink-2); }
+
+/* ---------- about (Zara statement) ---------- */
+.about { padding: var(--s9) var(--gut) var(--s10); }   /* Tiko 2026-11-25: centred, as before; photo inline but larger */
+.about__text { max-width: 22ch; margin: 0 auto; font: 500 clamp(36px, 4.6vw, 72px)/1.08 var(--serif); letter-spacing: -.015em; text-align: center; }
+.inl--face { width: 1.45em; height: 1.85em; border-radius: .16em; vertical-align: -.5em; margin: 0 .12em 0 0; transform: rotate(-3deg); }
+.inl--face img { object-position: center 25%; }
+.about__text .it { color: var(--accent); }
+
+/* ---------- CTA (peach block) ---------- */
+.cta {
+  display: grid; grid-template-columns: 7fr 4fr; gap: var(--s7); align-items: center;
+  margin: 0 var(--gut); padding: var(--s8); border-radius: var(--r-l); background: var(--peach);
+}
+.cta__copy { display: grid; gap: var(--s5); align-content: center; }
+.cta__h { font: 700 clamp(36px, 4.4vw, 68px)/1.02 var(--sans); letter-spacing: -.045em; max-width: 16ch; }
+.cta__h .it { color: var(--ink); font-size: 1.08em; }
+.cta__sub { font-size: 19px; }
+.cta__btns { display: flex; align-items: center; gap: var(--s5); flex-wrap: wrap; margin-top: var(--s2); }
+.cta__handle { font-size: 16px; }
+.cta__photo { border-radius: var(--r-m); overflow: hidden; aspect-ratio: 4 / 5; background: var(--peach-2); }
+.cta__photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; }
+
+.foot { display: flex; justify-content: space-between; gap: var(--s4); flex-wrap: wrap; padding: var(--s6) var(--gut) calc(var(--s6) + env(safe-area-inset-bottom, 0px)); font-size: 14px; color: var(--ink-2); }
+.foot a:hover { color: var(--ink); }
+
+/* ---------- modal ---------- */
+.modal {
+  position: fixed; inset: 0; z-index: 50; display: grid; grid-template-rows: auto 1fr auto;
+  background: rgba(248, 242, 235, .97); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  opacity: 0; transition: opacity .35s var(--ease);
+}
+.modal[hidden] { display: none; }
+.modal.is-open { opacity: 1; }
+.modal__top { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--s4); padding: calc(env(safe-area-inset-top, 0px) + 20px) var(--gut) var(--s5); }
+.modal__niche { font-size: 15px; color: var(--ink-2); margin-bottom: 4px; }
+.modal__h { font: 700 clamp(26px, 3vw, 44px)/1 var(--sans); letter-spacing: -.04em; }
+.modal__ctrl { display: flex; align-items: center; gap: 8px; }
+.modal__count { min-width: 56px; font: 500 15px/1 var(--sans); color: var(--ink-2); text-align: right; margin-right: 8px; font-variant-numeric: tabular-nums; }
+.round { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--ink); transition: background-color .3s var(--ease), color .3s var(--ease), opacity .3s; }
+.round svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.round:hover { background: var(--ink); color: var(--bg); }
+.round:disabled { opacity: .3; pointer-events: none; }
+.round--ink { background: var(--ink); color: var(--bg); }
+.round--ink:hover { background: var(--accent); border-color: var(--accent); }
+.modal__track {
+  display: flex; gap: 20px; align-items: flex-start; overflow-x: auto; overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory; scroll-padding-inline: var(--gut); padding: 0 var(--gut); scrollbar-width: none; outline: none;
+}
+.modal__track::-webkit-scrollbar { display: none; }
+.mslide { flex: none; scroll-snap-align: start; display: grid; gap: 12px; opacity: 0; transform: translateX(48px); transition: opacity .5s var(--ease), transform .7s var(--ease-out); transition-delay: calc(var(--i) * 60ms + 80ms); }
+.modal.is-open .mslide { opacity: 1; transform: none; }
+.mslide img { height: min(calc(100svh - 270px), 820px); width: auto; aspect-ratio: 3 / 4; border-radius: var(--r-m); background: var(--plate); object-fit: cover; }
+.mslide figcaption { display: flex; gap: 10px; font-size: 15px; color: var(--ink-2); }
+.mslide figcaption b { font-weight: 500; color: var(--ink); }
+.mslide:last-child { margin-right: var(--gut); }
+.modal__foot { display: flex; align-items: center; justify-content: space-between; gap: var(--s4); flex-wrap: wrap; padding: var(--s4) var(--gut) calc(env(safe-area-inset-bottom, 0px) + 20px); }
+.modal__price { font-size: 16px; color: var(--ink-2); }
+.modal__price b { color: var(--ink); font-weight: 600; }
+
+/* ---------- reveal ---------- */
+.js [data-rv] { opacity: 0; transform: translateY(24px); transition: opacity .8s var(--ease), transform 1s var(--ease-out); transition-delay: calc(var(--d, 0) * 90ms); }
+.js [data-rv].is-vis { opacity: 1; transform: none; }
+
+/* ---------- widths ---------- */
+@media (max-width: 1180px) {
+  .steps { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 900px) {
+  .top__nav .pill--line { display: none; }
+  .grid { grid-template-columns: repeat(2, 1fr); }
+  .facts { grid-template-columns: repeat(2, 1fr); }
+  .fact:nth-child(3) { padding-left: 0; border-left: 0; }
+  .fact:nth-child(n+3) { border-top: 1px solid var(--line); }
+  .row { grid-template-columns: 1fr auto; }
+  .row__txt { grid-column: 1 / -1; }
+  .cta { grid-template-columns: 1fr; padding: var(--s6); }
+  .cta__photo { max-width: 360px; }
+}
+@media (max-width: 640px) {
+  body { font-size: 16px; }
+  .top__name { font-size: 26px; }
+  .hero { padding: 88px var(--gut) 64px; }
+  .hero__h { font-size: 15.2vw; }
+  .hero__l2 { font-size: .96em; }
+  .br-m { display: inline; }
+  .hero__kicker, .hero__sub { font-size: 17px; }
+  .hero__cta { flex-direction: column; align-items: stretch; width: 100%; max-width: 340px; }
+  .hero__cta .btn { justify-content: space-between; }
+  .grid { grid-template-columns: 1fr; row-gap: var(--s6); }
+  .work--cta .work__media { aspect-ratio: auto; gap: var(--s6); }   /* a text card: its own height, not a 4:5 frame (Tiko 2026-11-25 «сильно растянуло») */
+  .steps { grid-template-columns: 1fr; }
+  .steps { grid-auto-rows: auto; }
+  .step { grid-row: auto; grid-template-rows: auto; row-gap: var(--s2); }
+  .step__ic { grid-row: auto; width: 68px; height: 68px; margin-top: var(--s3); }
+  .step__t { grid-row: auto; margin-top: var(--s3); }
+  .step p { grid-row: auto; }
+  .works, .process, .price { padding-block: var(--s8); }
+  .about { padding-block: var(--s8) var(--s9); }
+  .fact { padding-right: var(--s3); }
+  .fact + .fact { padding-left: var(--s3); }
+  .fact:nth-child(3) { padding-left: 0; }
+  .cta { margin: 0 8px; padding: var(--s6) var(--s5); }
+  .modal__top { align-items: flex-start; }
+  .modal__ctrl .round:not(.round--ink) { display: none; }
+  .modal__count { position: absolute; right: var(--gut); top: calc(env(safe-area-inset-top, 0px) + 86px); margin: 0; }
+  .modal__track { align-items: center; }
+  .mslide img { height: auto; width: min(84vw, calc((100svh - 300px) * .75)); }
+  .modal__foot .btn { width: 100%; justify-content: space-between; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .js [data-rv] { opacity: 1; transform: none; transition: none; }
+  .mslide { transition: none; opacity: 1; transform: none; }
+  .trail__card { transition: none; }
+  .btn, .btn::before, .btn__t > span, .btn__f, .btn__f svg { transition: none; }
+}
